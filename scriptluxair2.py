@@ -1,34 +1,24 @@
-# importing library
 import requests
-from bs4 import BeautifulSoup
- 
-# enter city name
-city = "lucknow"
- 
-# creating url and requests instance
-url = "https://www.google.com/search?q="+"weather"+city
-html = requests.get(url).content
- 
-# getting raw data
-soup = BeautifulSoup(html, 'html.parser')
-temp = soup.find('div', attrs={'class': 'BNeawe iBp4i AP7Wnd'}).text
-str = soup.find('div', attrs={'class': 'BNeawe tAd8D AP7Wnd'}).text
- 
-# formatting data
-data = str.split('\n')
-time = data[0]
-sky = data[1]
- 
-# getting all div tag
-listdiv = soup.findAll('div', attrs={'class': 'BNeawe s3v9rd AP7Wnd'})
-strd = listdiv[5].text
- 
-# getting other required data
-pos = strd.find('Wind')
-other_data = strd[pos:]
- 
-# printing all data
-print("Temperature is", temp)
-print("Time: ", time)
-print("Sky Description: ", sky)
-print(other_data)
+import streamlit as st
+
+tabs = ["Home", "Other"]
+
+tab0, tab1= st.tabs(tabs)
+
+lat = 49.75
+lon = 6.17
+
+url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&hourly=temperature_2m,precipitation_probability,snow_depth,cloud_cover,wind_speed_10m"
+
+r = requests.get(url)
+
+data = r.json()
+
+temp = data['hourly']['temperature_2m'][0]
+snow = data['hourly']['snow_depth'][0]
+cloud = data['hourly']['cloud_cover'][0]
+
+tab0.title("Test")
+tab0.write(f"Temperature: {temp}C")
+tab0.write(f"Snow coverage: {snow}")
+tab0.write(f"Cloud cover: {cloud}")
