@@ -6,7 +6,6 @@ tabs = ["Home", "Other"]
 
 tab0, tab1= st.tabs(tabs)
 
-
 tab0.title("Where will your dreams take you?")
 
 input_col1, input_col2 = tab0.columns(2)
