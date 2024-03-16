@@ -1,14 +1,16 @@
 def getWeather(lat, lon):
+  
     import requests
 
-    url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&hourly=temperature_2m,precipitation_probability,snow_depth,cloud_cover,wind_speed_10m"
+    url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,precipitation,cloud_cover"
 
     r = requests.get(url)
 
     data = r.json()
 
-    temp = data['hourly']['temperature_2m'][0]
-    snow = data['hourly']['snow_depth'][0]
-    cloud = data['hourly']['cloud_cover'][0]
+    temp = data['current']['temperature_2m']
+    perc = data['current']['precipitation']
+    cloud = data['current']['cloud_cover']
 
-    return temp, snow, cloud
+    return temp, perc, cloud
+
