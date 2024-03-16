@@ -7,24 +7,29 @@ tabs = ["Home", "Other"]
 tab0, tab1= st.tabs(tabs)
 
 
-tab0.title("Weather")
+tab0.title("Where will your dreams take you?")
+
+input_col1, input_col2 = tab0.columns(2)
 
 # Name of the city
-city = tab0.text_input("Enter the city name: ")
+city = input_col1.text_input("City:")
 
 # Name of the country - needed to make sure that the city is in the correct country
-country = tab0.text_input("Enter the country name: ")
+country = input_col2.text_input("Country:")
 
 
+######################################### Weather #############################################
 if tab0.button("Go"):
 
+    # Using the 'cities' script to find the latitude and longitude
     lat, lon = getlatlon(city, country)
 
+    # Getting live weather
     temp, perc, cloud = getWeather(lat, lon)
 
-    tab0.write(f"Lattitude: {lat} ")
-    tab0.write(f"Longitude: {lon} ")
-               
-    tab0.write(f"Temperature: {temp}C")
-    tab0.write(f"Percipitation: {perc}")
-    tab0.write(f"Cloud cover: {cloud}")
+
+    wether_col1, weather_col2, weather_col3 = tab0.columns(3)
+
+    wether_col1.metric("Temperature", f"{temp}°C")
+    weather_col2.metric("Percipitation", f"{perc}%")
+    weather_col3.metric("Cloud covrage", f"{cloud}%")
