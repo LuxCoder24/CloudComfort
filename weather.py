@@ -1,26 +1,14 @@
-import requests
-import streamlit as st
+def getWeather(lat, lon):
+    import requests
 
-tabs = ["Home", "Other"]
+    url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&hourly=temperature_2m,precipitation_probability,snow_depth,cloud_cover,wind_speed_10m"
 
-tab0, tab1= st.tabs(tabs)
+    r = requests.get(url)
 
-lat = 49.75
-lon = 6.17
+    data = r.json()
 
-url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&hourly=temperature_2m,precipitation_probability,snow_depth,cloud_cover,wind_speed_10m"
+    temp = data['hourly']['temperature_2m'][0]
+    snow = data['hourly']['snow_depth'][0]
+    cloud = data['hourly']['cloud_cover'][0]
 
-r = requests.get(url)
-
-print(r)
-
-data = r.json()
-
-temp = data['hourly']['temperature_2m'][0]
-snow = data['hourly']['snow_depth'][0]
-cloud = data['hourly']['cloud_cover'][0]
-
-tab0.title("Test")
-tab0.write(f"Temperature: {temp}C")
-tab0.write(f"Snow coverage: {snow}")
-tab0.write(f"Cloud cover: {cloud}")
+    return temp, snow, cloud
